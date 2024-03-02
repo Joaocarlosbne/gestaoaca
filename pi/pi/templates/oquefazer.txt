@@ -1,0 +1,7 @@
+Gestão de Estudantes: Crie funcionalidades para adicionar, atualizar, visualizar e excluir estudantes. Você pode incluir detalhes como nome, número de matrícula, curso, disciplinas matriculadas, etc.
+Gestão de Professores: Similar à gestão de estudantes, você pode criar funcionalidades para gerenciar professores. Isso pode incluir detalhes como nome, departamento, disciplinas que lecionam, etc.
+Gestão de Cursos: Permita a criação e gestão de cursos. Cada curso pode ter um conjunto de disciplinas, um coordenador (professor), e uma lista de estudantes matriculados.
+Gestão de Disciplinas: Crie funcionalidades para adicionar, atualizar, visualizar e excluir disciplinas. Você pode incluir detalhes como nome da disciplina, código da disciplina, professor responsável, etc.
+Gestão de Salas: Permita a alocação de salas para diferentes disciplinas. Certifique-se de que duas disciplinas não sejam alocadas na mesma sala ao mesmo tempo.
+Estatísticas de Desempenho: Implemente funcionalidades para calcular e exibir estatísticas de desempenho dos estudantes. Isso pode incluir média de notas, taxa de aprovação/reprovação, etc.
+Detecção de Conflitos de Horário: Implemente uma funcionalidade que detecta se um estudante ou professor está alocado em duas disciplinas ao mesmo tempo.

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <label for="numero_funcionario">numero_funcionario:</label>
+  <input id="numero_funcionario" type="text" name="numero_funcionario" required>
+
+  <label for="senhap">Password:</label>
+  <input id="senhap" type="password" name="senhap" required>
+
+  {% if form.non_field_errors %}
+    <p class="error">{{ form.non_field_errors }}</p>
+  {% endif %}
+
+  <input type="submit" value="Submit">
+</form>
+{% endblock %}

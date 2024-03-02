@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mx-auto px-4">
+        {% if post.img_url %}
+            <img src="{% static post.img_url %}" alt="{{ post.title }}" class="w-full object-cover h-64 mb-4">
+        {% endif %}
+        <h2 class="text-2xl font-bold mb-4">{{ post.title }}</h2>
+        <p class="mb-2">{{ post.description }}</p>
+        <p class="mb-2 text-gray-600">Posted by {{ post.author.username }} on {{ post.date_posted }}</p>
+        <div class="mt-8">
+            {{ post.content }}
+        </div>
+    </div>
+{% endblock %}

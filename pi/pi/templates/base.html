@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Página{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+                {% if user.is_authenticated %}
+                <p class="mr-5 hover:text-gray-900">Bem-Vindo, 
+                    {% if user.is_professor %}
+                    {{ user.numero_funcionario }}
+                    {% else %}
+                    {{ user.numero_estudante }}
+                    {% endif %}
+                </p>
+                <a href="{% url 'logout' %}" class="mr-5 hover:text-gray-900">Logout</a>
+                {% if user.is_professor %}
+                <a href="{% url 'criar_disciplina' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Disciplina</a>
+                <a href="{% url 'criar_sala' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Sala</a>
+                <a href="{% url 'create_post' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Post</a> <!-- Adicionado aqui -->
+                {% endif %}
+                {% else %}
+                <a href="{% url 'login_estudante' %}" class="mr-5 hover:text-gray-900">Login Estudante</a>
+                <a href="{% url 'registro_estudante' %}" class="mr-5 hover:text-gray-900">Registro Estudante</a>
+                <a href="{% url 'login_professor' %}" class="mr-5 hover:text-gray-900">Login Professor</a>
+                <a href="{% url 'registro_professor' %}" class="mr-5 hover:text-gray-900">Registro Professor</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-10">
+        {% block content %}
+        <!-- O conteúdo das páginas filhas será renderizado aqui. -->
+        {% endblock %}
+    </main>
+
+    <footer class="text-gray-600 body-font">
+        <div class="container mx-auto flex items-center flex-wrap border-t border-gray-200 pt-10 mt-10">
+            <!-- Aqui você pode adicionar o rodapé do seu site. -->
+        </div>
+    </footer>
+</body>
+</html>

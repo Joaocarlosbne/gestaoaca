@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" class="flex flex-col w-64 mx-auto mt-10 space-y-4">
+  {% csrf_token %}
+  <label for="numero_estudante" class="font-bold">NUmero do estudante:</label>
+  <input id="numero_estudante" type="text" name="numero_estudante" required class="border-2 border-gray-200 p-2 rounded-md">
+
+  <label for="senha" class="font-bold">Senha:</label>
+  <input id="senha" type="password" name="senha" required class="border-2 border-gray-200 p-2 rounded-md">
+
+  <input type="submit" value="Submit" class="bg-blue-500 text-white p-2 rounded-md cursor-pointer hover:bg-blue-700">
+</form>
+{% endblock %}
