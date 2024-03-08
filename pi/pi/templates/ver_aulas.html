@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold mb-4">Aulas</h1>
+<div class="grid grid-cols-7 gap-4">
+    {% for dia in dias_da_semana %}
+    <div>
+        <h2 class="text-xl font-semibold mb-2">{{ dia.0 }}</h2>
+        {% for aula in aulas %}
+        {% if aula.dia_da_semana == dia.0 %}
+        <div class="border border-gray-200 rounded p-2 mb-2">
+            <p><strong>Professor:</strong> {{ aula.professor }}</p>
+            <p><strong>Disciplina:</strong> {{ aula.disciplina }}</p>
+            <p><strong>Hora Início:</strong> {{ aula.hora_inicio }}</p>
+            <p><strong>Hora Fim:</strong> {{ aula.hora_fim }}</p>
+            <p><strong>Sala:</strong> {{ aula.sala }}</p>
+        </div>
+        {% endif %}
+        {% empty %}
+        <p>Nenhuma aula encontrada para {{ dia.0 }}</p>
+        {% endfor %}
+    </div>
+    {% empty %}
+    <p>Nenhum dia da semana encontrado</p>
+    {% endfor %}
+</div>
+{% endblock %}

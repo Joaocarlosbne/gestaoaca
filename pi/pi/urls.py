@@ -21,4 +21,7 @@ urlpatterns = [
     path('criar_sala/', views.criar_sala, name='criar_sala'),
     path('post/<slug:slug>/', views.post_detail, name='post_detail'),
     path('create_post/', views.create_post, name='create_post'),
+    path('criar_aula/', views.criar_aula, name='criar_aula'),
+    path('calendario/', views.calendario, name='calendario'),
+    path('ver_aulas/', views.ver_aulas, name='ver_aulas'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

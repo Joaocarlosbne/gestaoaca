@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Calendário de Aulas</h1>
+<ul>
+    {% for aula in aulas %}
+    <li>
+        <h2>{{ aula.disciplina.nome }}</h2>
+        <p>Professor: {{ aula.professor.nome }}</p>
+        <p>Aluno: {{ aula.aluno.nome }}</p>
+        <p>Dia da semana: {{ aula.dia_da_semana }}</p>
+        <p>Horário: {{ aula.hora_inicio }} - {{ aula.hora_fim }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

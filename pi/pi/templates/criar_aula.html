@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Criar Aula</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>
+        {{ form.professor.label_tag }}<br>
+        {{ form.professor }}
+    </p>
+    <p>
+        {{ form.disciplina.label_tag }}<br>
+        {{ form.disciplina }}
+    </p>
+    <p>
+        {{ form.dia_da_semana.label_tag }}<br>
+        {{ form.dia_da_semana }}
+    </p>
+    <p>
+        {{ form.hora_inicio.label_tag }}<br>
+        {{ form.hora_inicio }}
+    </p>
+    <p>
+        {{ form.hora_fim.label_tag }}<br>
+        {{ form.hora_fim }}
+    </p>
+    <p>
+        {{ form.sala.label_tag }}<br>  <!-- Adicionado aqui -->
+        {{ form.sala }}  <!-- Adicionado aqui -->
+    </p>
+    <p>
+        {{ form.alunos.label_tag }}<br>
+        {{ form.alunos }}
+    </p>
+    <button type="submit">Criar</button>
+</form>
+{% endblock %}

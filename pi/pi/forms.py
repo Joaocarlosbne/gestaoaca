@@ -1,5 +1,5 @@
 from django import forms
-from .models import Estudante, Professor, Disciplina, Sala, Post
+from .models import Estudante, Professor, Disciplina, Sala, Post, Aula
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -62,3 +62,31 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'description', 'content']
+
+from django import forms
+from .models import Aula, Estudante
+
+class AulaForm(forms.ModelForm):
+    HORAS = [(f'{i:02d}:00', f'{i:02d}:00') for i in range(24)]
+    DIAS_DA_SEMANA = [
+        ('Segunda-feira', 'Segunda-feira'),
+        ('Terça-feira', 'Terça-feira'),
+        ('Quarta-feira', 'Quarta-feira'),
+        ('Quinta-feira', 'Quinta-feira'),
+        ('Sexta-feira', 'Sexta-feira'),
+        ('Sábado', 'Sábado'),
+        ('Domingo', 'Domingo'),
+    ]
+    
+    alunos = forms.ModelMultipleChoiceField(
+        queryset=Estudante.objects.all(),
+        widget=forms.SelectMultiple
+    )
+    hora_inicio = forms.TimeField(widget=forms.Select(choices=HORAS))
+    hora_fim = forms.TimeField(widget=forms.Select(choices=HORAS))
+    dia_da_semana = forms.CharField(widget=forms.Select(choices=DIAS_DA_SEMANA))
+    sala = forms.ModelChoiceField(queryset=Sala.objects.all())  # Adicionado aqui
+
+    class Meta:
+        model = Aula
+        fields = ['alunos', 'professor', 'disciplina', 'dia_da_semana', 'hora_inicio', 'hora_fim', 'sala']

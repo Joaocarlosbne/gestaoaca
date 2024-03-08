@@ -6,12 +6,22 @@ from django.conf import settings
 from django.db import models
 import os
 
+class Aula(models.Model):
+    alunos = models.ManyToManyField('Estudante', related_name='aulas_estudante')
+    professor = models.ForeignKey('Professor', on_delete=models.CASCADE)
+    disciplina = models.ForeignKey('Disciplina', on_delete=models.CASCADE)
+    sala = models.ForeignKey('Sala', on_delete=models.SET_NULL, null=True)  # Adicionado aqui
+    dia_da_semana = models.CharField(max_length=20)
+    hora_inicio = models.TimeField()
+    hora_fim = models.TimeField()
+
 class Professor(AbstractUser):
     cordenador = models.CharField(max_length=100, null=True)
     nome = models.CharField(max_length=100, null=True)
     formacao = models.CharField(max_length=100, null=True)
     numero_funcionario = models.CharField(max_length=255, unique=True)
     senhap = models.CharField(max_length=150)
+    aulas = models.ManyToManyField('Aula', related_name='professores')
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -59,6 +69,7 @@ class Estudante(AbstractUser):
     cpf = models.CharField(max_length=14, null=True)
     rg = models.CharField(max_length=9, null=True)
     senha = models.CharField(max_length=150)
+    aulas = models.ManyToManyField('Aula')
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -111,6 +122,9 @@ class Disciplina(models.Model):
     horario_inicio = models.TimeField()
     horario_fim = models.TimeField()
 
+    def __str__(self):
+        return self.nome
+
 class Sala(models.Model):
     numero = models.CharField(max_length=10)
     bloco = models.CharField(max_length=1)
@@ -136,3 +150,4 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    

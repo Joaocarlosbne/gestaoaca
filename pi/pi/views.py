@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EstudanteRegistroForm, ProfessorRegistroForm, DisciplinaForm, ProfessorLoginForm, PostForm
-from .models import Estudante, Professor, Disciplina, Post
+from .forms import EstudanteRegistroForm, ProfessorRegistroForm, DisciplinaForm, ProfessorLoginForm, PostForm, AulaForm
+from .models import Estudante, Professor, Disciplina, Post, Aula
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .backends import ProfessorBackend, EstudanteBackend
@@ -130,3 +130,34 @@ def create_post(request):
         return redirect('home')
     else:
         return render(request, 'create_post.html')
+    
+def criar_aula(request):
+    if request.method == 'POST':
+        form = AulaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AulaForm()
+    return render(request, 'criar_aula.html', {'form': form})
+
+def calendario(request):
+    if request.user.is_authenticated:
+        if request.user.is_professor:
+            aulas = Aula.objects.filter(professor=request.user)
+        else:
+            aulas = Aula.objects.filter(aluno=request.user)
+        return render(request, 'calendario.html', {'aulas': aulas})
+    else:
+        return redirect('login')
+
+def ver_aulas(request):
+    if request.user.is_authenticated:
+        if request.user.is_professor:
+            aulas = Aula.objects.filter(professor=request.user)
+        else:
+            aulas = Aula.objects.filter(alunos=request.user)
+        dias_da_semana = AulaForm.DIAS_DA_SEMANA
+        return render(request, 'ver_aulas.html', {'aulas': aulas, 'dias_da_semana': dias_da_semana})
+    else:
+        return redirect('login')

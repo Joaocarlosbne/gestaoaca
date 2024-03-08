@@ -4,7 +4,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-v#0&zh2-ma@yog(_h4mpyuve(&z3mbvf7v+(35q-7f_!*kng6y'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = ['https://localhost:8000']
 
 AUTH_USER_MODEL = 'pi.Professor'
 
