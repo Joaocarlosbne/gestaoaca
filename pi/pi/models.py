@@ -1,9 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, User
-from django.contrib.auth.hashers import check_password, make_password
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.hashers import check_password
 from django.utils.text import slugify
 from django.conf import settings
-from django.db import models
 import os
 
 class Aula(models.Model):
@@ -47,7 +46,7 @@ class Professor(AbstractUser):
         db_table = 'auth_professor'
 
     def __str__(self):
-        return self.username
+        return self.numero_funcionario
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.senhap)
@@ -130,7 +129,7 @@ class Sala(models.Model):
     bloco = models.CharField(max_length=1)
 
     def __str__(self):
-        return self.bloco + self.numero
+        return self.bloco + "-" + self.numero
     
 class Post(models.Model):
     title = models.CharField(max_length=200)

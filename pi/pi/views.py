@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EstudanteRegistroForm, ProfessorRegistroForm, DisciplinaForm, ProfessorLoginForm, PostForm, AulaForm
-from .models import Estudante, Professor, Disciplina, Post, Aula
+from .models import Estudante, Professor, Disciplina, Post, Aula, Sala
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .backends import ProfessorBackend, EstudanteBackend
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import LoginForm
+from .forms import LoginForm, EstudanteRegistroForm, EstudanteForm, ProfessorForm, SalaForm
 from django.forms.widgets import Select
 from django.shortcuts import render
 from .forms import SalaForm
@@ -93,7 +93,10 @@ def criar_disciplina(request):
     if request.method == 'POST':
         form = DisciplinaForm(request.POST)
         if form.is_valid():
-            form.save()
+            disciplina = form.save(commit=False)
+            disciplina.horario_inicio = '00:00'
+            disciplina.horario_fim = '00:00'
+            disciplina.save()
             return redirect('home')
     else:
         form = DisciplinaForm()
@@ -161,3 +164,89 @@ def ver_aulas(request):
         return render(request, 'ver_aulas.html', {'aulas': aulas, 'dias_da_semana': dias_da_semana})
     else:
         return redirect('login')
+    
+def editar(request):
+    aulas = Aula.objects.all()
+    disciplinas = Disciplina.objects.all()
+    estudantes = Estudante.objects.all()
+    posts = Post.objects.all()
+    salas = Sala.objects.all()
+    professores = Professor.objects.all()
+    return render(request, 'editar.html', {
+        'aulas': aulas,
+        'disciplinas': disciplinas,
+        'estudantes': estudantes,
+        'posts': posts,
+        'salas': salas,
+        'professores': professores
+    })
+
+def editar_disciplina(request, id):
+    disciplina = get_object_or_404(Disciplina, id=id)
+    if request.method == 'POST':
+        form = DisciplinaForm(request.POST, instance=disciplina)
+        if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = DisciplinaForm(instance=disciplina)
+    return render(request, 'editar_disciplina.html', {'form': form})
+
+def excluir_disciplina(request, id):
+    disciplina = get_object_or_404(Disciplina, id=id)
+    disciplina.delete()
+    return redirect('editar')
+
+def editar_estudante(request, id):
+    estudante = get_object_or_404(Estudante, id=id)
+    if request.method == 'POST':
+        form = EstudanteForm(request.POST, instance=estudante)
+        if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = EstudanteForm(instance=estudante)
+    return render(request, 'editar_estudante.html', {'form': form})
+
+def excluir_estudante(request, id):
+    estudante = get_object_or_404(Estudante, id=id)
+    if request.method == 'POST':
+        estudante.delete()
+        return redirect('editar')
+    return render(request, 'excluir_estudante.html', {'estudante': estudante})
+
+def editar_professor(request, id):
+    professor = get_object_or_404(Professor, id=id)
+    if request.method == 'POST':
+        form = ProfessorForm(request.POST, instance=professor)
+        if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = ProfessorForm(instance=professor)
+    return render(request, 'editar_professor.html', {'form': form})
+
+def excluir_professor(request, id):
+    professor = get_object_or_404(Professor, id=id)
+    if request.method == 'POST':
+        professor.delete()
+        return redirect('professores')
+    return render(request, 'excluir_professor.html', {'professor': professor})
+
+def editar_salas(request, id):
+    sala = get_object_or_404(Sala, id=id)
+    if request.method == 'POST':
+        form = SalaForm(request.POST, instance=sala)
+        if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = SalaForm(instance=sala)
+    return render(request, 'editar_sala.html', {'form': form})
+
+def excluir_salas(request, id):
+    sala = get_object_or_404(Sala, id=id)
+    if request.method == 'POST':
+        sala.delete()
+        return redirect('editar')
+    return render(request, 'excluir_sala.html', {'sala': sala})

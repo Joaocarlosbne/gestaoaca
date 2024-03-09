@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <h1 class="text-4xl font-bold mb-4">Editar</h1>
+
+    <h2 class="text-2xl font-bold mb-2">Disciplinas</h2>
+    <ul class="list-disc pl-5">
+        {% for disciplina in disciplinas %}
+        <li class="mb-2">
+            {{ disciplina.nome }}
+            <a href="{% url 'editar_disciplina' disciplina.id %}" class="text-blue-500 hover:text-blue-800">Editar</a>
+            |
+            <a href="{% url 'excluir_disciplina' disciplina.id %}" class="text-red-500 hover:text-red-800">Excluir</a>
+        </li>
+        {% empty %}
+        <li>Nenhuma disciplina encontrada.</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="text-2xl font-bold mb-2">Estudantes</h2>
+    <ul class="list-disc pl-5">
+        {% for estudante in estudantes %}
+        <li class="mb-2">
+            {{ estudante.numero_estudante }} 
+            <a href="{% url 'editar_estudante' estudante.id %}" class="text-blue-500 hover:text-blue-800">Editar</a>
+            |
+            <a href="{% url 'excluir_estudante' estudante.id %}" class="text-red-500 hover:text-red-800">Excluir</a>
+        </li>
+        {% empty %}
+        <li>Nenhum estudante encontrado.</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="text-2xl font-bold mb-2">Professores</h2>
+    <ul class="list-disc pl-5">
+        {% for professor in professores %}
+        <li class="mb-2">
+            {{ professor.numero_funcionario }} 
+            <a href="{% url 'editar_professor' professor.id %}" class="text-blue-500 hover:text-blue-800">Editar</a>
+            |
+            <a href="{% url 'excluir_professor' professor.id %}" class="text-red-500 hover:text-red-800">Excluir</a>
+        </li>
+        {% empty %}
+        <li>Nenhum professor encontrado.</li>
+        {% endfor %}
+    </ul>
+
+    <h2 class="text-2xl font-bold mb-2">Salas</h2>
+    <ul class="list-disc pl-5">
+        {% for sala in salas %} 
+        <li class="mb-2">
+            {{ sala.numero }} 
+            <a href="{% url 'editar_sala' sala.id %}" class="text-blue-500 hover:text-blue-800">Editar</a>
+            |
+            <a href="{% url 'excluir_sala' sala.id %}" class="text-red-500 hover:text-red-800">Excluir</a>
+        </li>
+        {% empty %}
+        <li>Nenhuma sala encontrada.</li>
+        {% endfor %}    
+    </ul>    
+</div>
+{% endblock %}

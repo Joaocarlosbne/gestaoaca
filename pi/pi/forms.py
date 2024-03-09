@@ -35,14 +35,9 @@ class ProfessorRegistroForm(forms.ModelForm):
         return professor
 
 class DisciplinaForm(forms.ModelForm):
-    HORAS = [(f'{i:02d}:00', f'{i:02d}:00') for i in range(24)]
-    
-    horario_inicio = forms.TimeField(widget=forms.Select(choices=HORAS))
-    horario_fim = forms.TimeField(widget=forms.Select(choices=HORAS))
-
     class Meta:
         model = Disciplina
-        fields = ['nome', 'codigo', 'professor', 'sala', 'horario_inicio', 'horario_fim']
+        fields = ['nome', 'codigo']
 
 class LoginForm(forms.Form):
     numero_estudante = forms.CharField()
@@ -90,3 +85,18 @@ class AulaForm(forms.ModelForm):
     class Meta:
         model = Aula
         fields = ['alunos', 'professor', 'disciplina', 'dia_da_semana', 'hora_inicio', 'hora_fim', 'sala']
+
+class EstudanteForm(forms.ModelForm):
+    class Meta:
+        model = Estudante
+        fields = ['numero_estudante', 'nome', 'matricula', 'curso', 'data_entrada', 'idade', 'endereco', 'cpf', 'rg', 'senha']
+
+class ProfessorForm(forms.ModelForm):
+    class Meta:
+        model = Professor
+        fields = ['cordenador', 'nome', 'formacao', 'numero_funcionario', 'senhap']
+
+class SalaForm(forms.ModelForm):
+    class Meta:
+        model = Sala
+        fields = ['numero', 'bloco']
