@@ -250,3 +250,39 @@ def excluir_salas(request, id):
         sala.delete()
         return redirect('editar')
     return render(request, 'excluir_sala.html', {'sala': sala})
+
+def editar_post(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'editar_post.html', {'form': form})
+
+def excluir_post(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('editar')
+    return render(request, 'excluir_post.html', {'post': post})
+
+def editar_aula(request, id):
+    aula = get_object_or_404(Aula, id=id)
+    if request.method == 'POST':
+        form = AulaForm(request.POST, instance=aula)
+        if form.is_valid():
+            form.save()
+            return redirect('editar')
+    else:
+        form = AulaForm(instance=aula)
+    return render(request, 'editar_aula.html', {'form': form})
+
+def excluir_aula(request, id):
+    aula = get_object_or_404(Aula, id=id)
+    if request.method == 'POST':
+        aula.delete()
+        return redirect('editar')
+    return render(request, 'excluir_aula.html', {'aula': aula})

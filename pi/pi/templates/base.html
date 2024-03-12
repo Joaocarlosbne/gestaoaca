@@ -21,11 +21,20 @@
                 <a href="{% url 'logout' %}" class="mr-5 hover:text-gray-900">Logout</a>
                 <a href="{% url 'ver_aulas' %}" class="mr-5 text-gray-900 hover:text-gray-700">Ver Aulas</a> <!-- Adicionado aqui -->
                 {% if user.is_professor %}
-                <a href="{% url 'criar_disciplina' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Disciplina</a>
-                <a href="{% url 'criar_sala' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Sala</a>
-                <a href="{% url 'create_post' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Post</a>
-                <a href="{% url 'criar_aula' %}" class="mr-5 text-gray-900 hover:text-gray-700">Criar Aula</a>
-                <a href="{% url 'editar' %}" class="mr-5 text-gray-900 hover:text-gray-700">Editar</a> <!-- Adicionado aqui -->
+                <div class="relative inline-block text-left">
+                    <button type="button" class="mr-5 text-gray-900 hover:text-gray-700 focus:outline-none" id="professorMenuButton" aria-expanded="false" aria-haspopup="true">
+                        Opções do Professor
+                    </button>
+                    <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" id="professorMenu" role="menu" aria-orientation="vertical" aria-labelledby="professorMenuButton" tabindex="-1">
+                        <div class="py-1" role="none">
+                            <a href="{% url 'criar_disciplina' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Criar Disciplina</a>
+                            <a href="{% url 'criar_sala' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Criar Sala</a>
+                            <a href="{% url 'create_post' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Criar Post</a>
+                            <a href="{% url 'criar_aula' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Criar Aula</a>
+                            <a href="{% url 'editar' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Editar</a> <!-- Adicionado aqui -->
+                        </div>
+                    </div>
+                </div>
                 {% endif %}
                 {% else %}
                 <a href="{% url 'login_estudante' %}" class="mr-5 hover:text-gray-900">Login Estudante</a>
@@ -43,10 +52,20 @@
         {% endblock %}
     </main>
 
-    <footer class="text-gray-600 body-font">
+    <footer class="text-gray-600 body-font"></footer>
         <div class="container mx-auto flex items-center flex-wrap border-t border-gray-200 pt-10 mt-10">
             <!-- Aqui você pode adicionar o rodapé do seu site. -->
+            <div class="text-center mt-5">
+                <a href="{% url 'home' %}" class="text-gray-500 hover:text-gray-900">Voltar para a Página principal</a>
+            </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("professorMenuButton").addEventListener("click", function() {
+                document.getElementById("professorMenu").classList.toggle("hidden");
+            });
+        });
+    </script>
 </body>
 </html>

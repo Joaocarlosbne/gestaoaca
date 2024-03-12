@@ -1,37 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Criar Aula</h1>
+<h1 class="text-2xl font-bold mb-4">Criar Aula</h1>
 <form method="post">
     {% csrf_token %}
-    <p>
-        {{ form.professor.label_tag }}<br>
+    <div class="mb-4">
+        <label for="professor" class="block font-bold">Professor</label>
         {{ form.professor }}
-    </p>
-    <p>
-        {{ form.disciplina.label_tag }}<br>
+    </div>
+    <div class="mb-4">
+        <label for="disciplina" class="block font-bold">Disciplina</label>
         {{ form.disciplina }}
-    </p>
-    <p>
-        {{ form.dia_da_semana.label_tag }}<br>
+    </div>
+    <div class="mb-4">
+        <label for="dia_da_semana" class="block font-bold">Dia da Semana</label>
         {{ form.dia_da_semana }}
-    </p>
-    <p>
-        {{ form.hora_inicio.label_tag }}<br>
+    </div>
+    <div class="mb-4">
+        <label for="hora_inicio" class="block font-bold">Hora de Início</label>
         {{ form.hora_inicio }}
-    </p>
-    <p>
-        {{ form.hora_fim.label_tag }}<br>
+    </div>
+    <div class="mb-4">
+        <label for="hora_fim" class="block font-bold">Hora de Fim</label>
         {{ form.hora_fim }}
-    </p>
-    <p>
-        {{ form.sala.label_tag }}<br>  <!-- Adicionado aqui -->
-        {{ form.sala }}  <!-- Adicionado aqui -->
-    </p>
-    <p>
-        {{ form.alunos.label_tag }}<br>
+    </div>
+    <div class="mb-4">
+        <label for="sala" class="block font-bold">Sala</label>
+        {{ form.sala }}
+    </div>
+    <div class="mb-4">
+        <label for="alunos" class="block font-bold">Alunos</label>
         {{ form.alunos }}
-    </p>
-    <button type="submit">Criar</button>
+    </div>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Criar</button>
 </form>
 {% endblock %}
