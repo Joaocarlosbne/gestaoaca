@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import check_password
 from django.utils.text import slugify
 from django.conf import settings
+from django.db.models import Sum
 import os
 
 class Aula(models.Model):
@@ -13,6 +14,7 @@ class Aula(models.Model):
     dia_da_semana = models.CharField(max_length=20)
     hora_inicio = models.TimeField()
     hora_fim = models.TimeField()
+    numero_lista = models.IntegerField(default=1)
 
 class Professor(AbstractUser):
     cordenador = models.CharField(max_length=100, null=True)
@@ -104,6 +106,18 @@ class Estudante(AbstractUser):
     def is_professor(self):
         return False
 
+    def media_notas(self):
+        notas = Nota.objects.filter(estudante=self)
+        total = sum(nota.valor * nota.prova.peso for nota in notas)
+        pesos = sum(nota.prova.peso for nota in notas)
+        return total / pesos if pesos else 0
+
+    def porcentagem_presenca(self, aula):
+        presencas = Presenca.objects.filter(aula=aula, estudante=self)
+        total = presencas.count()
+        presentes = presencas.filter(presente=True).count()
+        return presentes / total if total else 0
+
 class Curso(models.Model):
     nome = models.CharField(max_length=100)
     carga_horaria = models.IntegerField()
@@ -150,3 +164,17 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
+class Presenca(models.Model):
+    aula = models.ForeignKey('Aula', on_delete=models.CASCADE)
+    estudante = models.ForeignKey('Estudante', on_delete=models.CASCADE)
+    presente = models.BooleanField(default=False)
+
+class Prova(models.Model):
+    aula = models.ForeignKey('Aula', on_delete=models.CASCADE)
+    data = models.DateField()
+    peso = models.FloatField()
+
+class Nota(models.Model):
+    estudante = models.ForeignKey('Estudante', on_delete=models.CASCADE)
+    prova = models.ForeignKey('Prova', on_delete=models.CASCADE)
+    valor = models.FloatField()

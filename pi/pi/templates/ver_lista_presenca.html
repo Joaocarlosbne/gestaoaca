@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Lista de Presença</h2>
+  {% for (disciplina, aula_id, numero_lista), presencas in presencas_por_aula.items %}
+    <h3>{{ disciplina }} - Aula {{ numero_lista }}</h3>
+    <ul>
+      {% for presenca in presencas %}
+        <li>{{ presenca.estudante.nome }}: {% if presenca.presente %}Presente{% else %}Ausente{% endif %}</li>
+      {% empty %}
+        <li>Não há presenças registradas para esta aula.</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock %}

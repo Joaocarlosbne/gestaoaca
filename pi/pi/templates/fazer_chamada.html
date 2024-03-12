@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Fazer Chamada</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for estudante in estudantes %}
+      <div>
+        <label for="presente_{{ estudante.id }}">{{ estudante.nome }}</label>
+        <input type="checkbox" id="presente_{{ estudante.id }}" name="presente_{{ estudante.id }}">
+      </div>
+    {% endfor %}
+    <button type="submit">Salvar</button>
+  </form>
+{% endblock %}

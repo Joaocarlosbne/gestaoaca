@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Lista de Cursos</h1>
+    <!-- Aqui deve ser exibida a lista de cursos -->
+    {% for curso in cursos %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h2 class="card-title">{{ curso.nome }}</h2>
+                <p class="card-text"><strong>Carga Horária:</strong> {{ curso.carga_horaria }}</p>
+                <p class="card-text"><strong>Tipo:</strong> {{ curso.tipo }}</p>
+                <p class="card-text"><strong>Descrição:</strong> {{ curso.descricao }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
