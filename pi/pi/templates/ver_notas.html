@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Notas das Provas</h2>
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+        <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estudante</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prova - Nota</th>
+        </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+        {% for dado in dados %}
+            {% if dado.estudante %}
+                {% for nota in dado.notas %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dado.estudante.nome }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ nota.prova.data|date:"d/m/Y" }} - {{ nota.valor }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Média e Status</h2>
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+        <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estudante</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Média Ponderada - Status</th>
+        </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+        {% for dado in dados %}
+            {% if dado.estudante %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dado.estudante.nome }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ dado.media_ponderada }} - {{ dado.status }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -34,10 +34,7 @@
                             <a href="{% url 'editar' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Editar</a> <!-- Adicionado aqui -->
                             <a href="{% url 'criar_curso' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Criar Curso</a>
                             <a href="{% url 'cursos' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Ver Cursos</a>
-                            {% if aula %}
-                            <a href="{% url 'fazer_chamada' aula.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Fazer Chamada</a>
-                            <a href="{% url 'ver_lista_presenca' aula.id %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Ver Lista de Presença</a>
-                            {% endif %}
+                            <a href="{% url 'gestao' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" tabindex="-1">Gestão de Aulas</a>
                         </div>
                     </div>
                 </div>

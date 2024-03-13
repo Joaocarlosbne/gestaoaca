@@ -17,7 +17,8 @@ from .forms import (
     EstudanteForm, 
     ProfessorForm, 
     SalaForm, 
-    CursoForm
+    CursoForm,
+    ProvaForm
 )
 
 from .models import (
@@ -330,34 +331,25 @@ def fazer_chamada(request, aula_id):
             presente = request.POST.get(f'presente_{estudante.id}') == 'on'
             Presenca.objects.create(aula=aula, estudante=estudante, presente=presente)
 
-            total_aulas = aula.alunos.count()
-            total_presencas = Presenca.objects.filter(estudante=estudante, presente=True).count()
-
-            if total_presencas < total_aulas * 0.75:
-                messages.error(request, f'O estudante {estudante.nome} não atingiu o número mínimo de aulas.')
-                continue
-
-            if total_presencas > 100:
-                messages.error(request, f'O estudante {estudante.nome} excedeu o número máximo de aulas.')
-                continue
-
-        return redirect('editar')
+        return redirect('ver_lista_presenca', aula_id=aula.id)
     else:
         estudantes = aula.alunos.all()
-        return render(request, 'fazer_chamada.html', {'estudantes': estudantes})
+        return render(request, 'fazer_chamada.html', {'estudantes': estudantes, 'aula': aula})
     
 def definir_notas(request, aula_id):
     aula = Aula.objects.get(id=aula_id)
+    provas = Prova.objects.filter(aula=aula)
     if request.method == 'POST':
         estudantes = aula.alunos.all()
-        prova = Prova.objects.get(aula=aula)
+        prova_id = request.POST.get('prova')
+        prova = Prova.objects.get(id=prova_id)
         for estudante in estudantes:
             nota = request.POST.get(f'nota_{estudante.id}', 0)
             Nota.objects.create(estudante=estudante, prova=prova, valor=nota)
         return redirect('editar')
     else:
         estudantes = aula.alunos.all()
-        return render(request, 'definir_notas.html', {'estudantes': estudantes})
+        return render(request, 'definir_notas.html', {'estudantes': estudantes, 'provas': provas})
 
 def definir_quantidade_provas(request, aula_id):
     aula = Aula.objects.get(id=aula_id)
@@ -414,13 +406,21 @@ def ver_lista_presenca(request, aula_id=None):
     else:
         aulas = Aula.objects.all()
 
-    presencas_por_aula = {}
+    presencas_por_materia = {}
 
     for aula in aulas:
-        presencas = Presenca.objects.filter(aula=aula)
-        presencas_por_aula[(aula.disciplina.nome, aula.numero_lista)] = presencas
+        presencas = Presenca.objects.filter(aula=aula).order_by('estudante__nome')
+        if aula.disciplina.nome not in presencas_por_materia:
+            presencas_por_materia[aula.disciplina.nome] = {}
+        if aula.id not in presencas_por_materia[aula.disciplina.nome]:
+            presencas_por_materia[aula.disciplina.nome][aula.id] = {}
 
-    return render(request, 'ver_lista_presenca.html', {'presencas_por_aula': presencas_por_aula})
+        for presenca in presencas:
+            if presenca.estudante.nome not in presencas_por_materia[aula.disciplina.nome][aula.id]:
+                presencas_por_materia[aula.disciplina.nome][aula.id][presenca.estudante.nome] = []
+            presencas_por_materia[aula.disciplina.nome][aula.id][presenca.estudante.nome].append(presenca)
+
+    return render(request, 'ver_lista_presenca.html', {'presencas_por_materia': presencas_por_materia})
     
 def criar_curso(request):
     if request.method == 'POST':
@@ -435,3 +435,45 @@ def criar_curso(request):
 def cursos(request):
     cursos = Curso.objects.all()
     return render(request, 'cursos.html', {'cursos': cursos})
+
+def gestao(request):
+    # Certifique-se de que o usuário é um professor
+    if not request.user.is_professor:
+        return redirect('home')  # ou onde quer que você queira redirecionar usuários não professores
+
+    # Buscar todas as aulas que o professor atual está lecionando
+    aulas = Aula.objects.filter(professor=request.user)
+
+    # Renderizar o template com as aulas
+    return render(request, 'gestao.html', {'aulas': aulas})
+
+def definir_prova(request, aula_id):
+    if request.method == 'POST':
+        form = ProvaForm(request.POST)
+        if form.is_valid():
+            prova = form.save(commit=False)
+            prova.aula_id = aula_id
+            prova.save()
+            return redirect('gestao')
+    else:
+        form = ProvaForm()
+
+    return render(request, 'definir_prova.html', {'form': form})
+
+def ver_notas(request, aula_id):
+    estudantes = Estudante.objects.all()
+    dados = []
+
+    for estudante in estudantes:
+        notas = Nota.objects.filter(estudante=estudante)
+        media_ponderada = estudante.media_notas()
+        status = estudante.esta_aprovado()
+        dados.append({
+            'estudante': estudante,
+            'notas': notas,
+            'media_ponderada': media_ponderada,
+            'status': 'Aprovado' if status else 'Reprovado',
+            'rowspan': notas.count() + 1,
+        })
+
+    return render(request, 'ver_notas.html', {'dados': dados})

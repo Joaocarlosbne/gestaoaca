@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <label for="quantidade">Quantidade de Provas</label>
+    <input type="number" id="quantidade" name="quantidade">
+    <button type="submit">Definir Quantidade de Provas</button>
+</form>
+
+{% endblock %}

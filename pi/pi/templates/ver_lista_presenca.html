@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Lista de Presença</h2>
-  {% for (disciplina, aula_id, numero_lista), presencas in presencas_por_aula.items %}
-    <h3>{{ disciplina }} - Aula {{ numero_lista }}</h3>
-    <ul>
-      {% for presenca in presencas %}
-        <li>{{ presenca.estudante.nome }}: {% if presenca.presente %}Presente{% else %}Ausente{% endif %}</li>
-      {% empty %}
-        <li>Não há presenças registradas para esta aula.</li>
-      {% endfor %}
-    </ul>
-  {% endfor %}
+{% for materia, aulas in presencas_por_materia.items %}
+    <h1 class="text-2xl font-bold mb-4">{{ materia }}</h1>
+    {% for aula_id, estudantes in aulas.items %}
+        <h2 class="text-xl font-semibold mb-2">Aula {{ aula_id }} - Lista de Presença</h2>
+        <table class="table-auto w-full mb-4">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Estudante</th>
+                    <th class="px-4 py-2">Presença</th>
+                    <th class="px-4 py-2">Chamada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for estudante, presencas in estudantes.items %}
+                    {% for presenca in presencas %}
+                        <tr>
+                            <td class="border px-4 py-2">{{ estudante }}</td>
+                            <td class="border px-4 py-2">{{ presenca.presente|yesno:"Presente,Ausente" }}</td>
+                            <td class="border px-4 py-2">Chamada {{ forloop.counter }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endfor %}
 {% endblock %}

@@ -1,0 +1,8 @@
+<form method="POST">
+    {% csrf_token %}
+    {% for prova in provas %}
+        <label for="peso_{{ prova.id }}">Peso da Prova {{ prova.id }}</label>
+        <input type="number" id="peso_{{ prova.id }}" name="peso_{{ prova.id }}">
+    {% endfor %}
+    <button type="submit">Definir Peso das Provas</button>
+</form>

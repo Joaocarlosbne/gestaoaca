@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <label for="prova">Prova:</label>
+    <select id="prova" name="prova">
+        {% for prova in provas %}
+            <option value="{{ prova.id }}">{{ prova.data|date:"d/m/Y" }}</option>
+        {% endfor %}
+    </select>
+    {% for estudante in estudantes %}
+        <label for="nota_{{ estudante.id }}">{{ estudante.nome }}</label>
+        <input type="number" step="0.1" id="nota_{{ estudante.id }}" name="nota_{{ estudante.id }}">
+    {% endfor %}
+    <button type="submit">Definir Notas</button>
+</form>
+
+{% endblock %}

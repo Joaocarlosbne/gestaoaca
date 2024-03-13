@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <label for="id_data">Data:</label>
+    <input type="date" id="id_data" name="data" value="{{ form.data.value|date:'Y-m-d' }}" required>
+    <label for="id_peso">Peso:</label>
+    <input type="number" id="id_peso" name="peso" value="{{ form.peso.value }}" required>
+    <button type="submit">Adicionar Prova</button>
+</form>
+{% endblock %}

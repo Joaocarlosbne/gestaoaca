@@ -71,6 +71,7 @@ class Estudante(AbstractUser):
     rg = models.CharField(max_length=9, null=True)
     senha = models.CharField(max_length=150)
     aulas = models.ManyToManyField('Aula')
+    reprovado = models.BooleanField(default=False)
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -101,6 +102,9 @@ class Estudante(AbstractUser):
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.senha)
+    
+    def esta_aprovado(self):
+        return self.media_notas() >= 6.0
 
     @property
     def is_professor(self):

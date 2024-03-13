@@ -1,5 +1,5 @@
 from django import forms
-from .models import Estudante, Professor, Disciplina, Sala, Post, Aula, Curso
+from .models import Estudante, Professor, Disciplina, Sala, Post, Aula, Curso, Prova, Presenca, Nota
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
@@ -105,3 +105,8 @@ class CursoForm(forms.ModelForm):
     class Meta:
         model = Curso
         fields = ['nome', 'carga_horaria', 'tipo', 'descricao']
+    
+class ProvaForm(forms.ModelForm):
+    class Meta:
+        model = Prova
+        fields = ['data', 'peso']
