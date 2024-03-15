@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.forms.widgets import Select
+from django import forms
+from .models import Aula, Estudante
 
 class EstudanteRegistroForm(forms.ModelForm):
     senha = forms.CharField(widget=forms.PasswordInput)
@@ -56,10 +58,8 @@ class SalaForm(forms.ModelForm):  # define SalaForm here
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'description', 'content']
+        fields = ['title', 'description', 'content', 'img_url']
 
-from django import forms
-from .models import Aula, Estudante
 
 class AulaForm(forms.ModelForm):
     HORAS = [(f'{i:02d}:00', f'{i:02d}:00') for i in range(24)]
@@ -87,11 +87,14 @@ class AulaForm(forms.ModelForm):
         fields = ['alunos', 'professor', 'disciplina', 'dia_da_semana', 'hora_inicio', 'hora_fim', 'sala']
 
 class EstudanteForm(forms.ModelForm):
+
     class Meta:
         model = Estudante
         fields = ['numero_estudante', 'nome', 'matricula', 'curso', 'data_entrada', 'idade', 'endereco', 'cpf', 'rg', 'senha']
 
 class ProfessorForm(forms.ModelForm):
+    senhap = forms.CharField(widget=forms.PasswordInput(render_value=False))
+    
     class Meta:
         model = Professor
         fields = ['cordenador', 'nome', 'formacao', 'numero_funcionario', 'senhap']

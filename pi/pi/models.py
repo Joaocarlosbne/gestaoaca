@@ -103,15 +103,21 @@ class Estudante(AbstractUser):
     def check_password(self, raw_password):
         return check_password(raw_password, self.senha)
     
-    def esta_aprovado(self):
-        return self.media_notas() >= 6.0
+    def esta_aprovado(self, aula=None):
+        media = self.media_notas(aula)
+        return media >= 6.0
 
     @property
     def is_professor(self):
         return False
 
-    def media_notas(self):
-        notas = Nota.objects.filter(estudante=self)
+    def media_notas(self, aula=None):
+        if aula is None:
+          notas = Nota.objects.filter(estudante=self)
+        else:
+         provas_da_aula = Prova.objects.filter(aula=aula)
+         notas = Nota.objects.filter(estudante=self, prova__in=provas_da_aula)
+
         total = sum(nota.valor * nota.prova.peso for nota in notas)
         pesos = sum(nota.prova.peso for nota in notas)
         return total / pesos if pesos else 0

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <h1 class="text-xl font-bold mb-4">Excluir Estudante</h1>
+    <p class="mb-4">Tem certeza de que deseja excluir o estudante "{{ estudante.nome }}"?</p>
+    <form method="POST" class="mb-4">
+        {% csrf_token %}
+        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            Excluir
+        </button>
+    </form>
+    <a href="{% url 'editar' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Cancelar
+    </a>
+</div>
+{% endblock %}

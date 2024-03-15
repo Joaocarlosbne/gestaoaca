@@ -19,7 +19,8 @@
                     {% endif %}
                 </p>
                 <a href="{% url 'logout' %}" class="mr-5 hover:text-gray-900">Logout</a>
-                <a href="{% url 'ver_aulas' %}" class="mr-5 text-gray-900 hover:text-gray-700">Ver Aulas</a> <!-- Adicionado aqui -->
+                <a href="{% url 'ver_aulas' %}" class="mr-5 text-gray-900 hover:text-gray-700">Ver Aulas</a> 
+                <a href="{% url 'ver_minhas_notas' %}" class="mr-5 text-gray-900 hover:text-gray-700">Ver Minhas Notas</a>
                 {% if user.is_professor %}
                 <div class="relative inline-block text-left">
                     <button type="button" class="mr-5 text-gray-900 hover:text-gray-700 focus:outline-none" id="professorMenuButton" aria-expanded="false" aria-haspopup="true">

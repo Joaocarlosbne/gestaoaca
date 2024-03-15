@@ -8,6 +8,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost:8000']
 
+CSRF_COOKIE_DOMAIN = 'glowing-goldfish-x5w945qxrxww3pj4g-8000.app.github.dev'
+
 AUTH_USER_MODEL = 'pi.Professor'
 
 INSTALLED_APPS = [

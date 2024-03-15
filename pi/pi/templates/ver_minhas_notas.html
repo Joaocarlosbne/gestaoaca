@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Minhas Notas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Estudante</th>
+        <th>Notas</th>
+        <th>Média Ponderada</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dado in dados %}
+        <tr>
+          <td>{{ dado.estudante.nome }}</td>
+          <td>
+            {% for nota in dado.notas %}
+              <p>Prova: {{ nota.prova.nome }}, Nota: {{ nota.valor }}</p>
+            {% endfor %}
+          </td>
+          <td>{{ dado.media_ponderada }}</td>
+          <td>{{ dado.status }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

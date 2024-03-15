@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 
 from .forms import (
     EstudanteRegistroForm, 
@@ -107,9 +108,8 @@ def login_professor(request):
         if form.is_valid():
             numero_funcionario = form.cleaned_data.get('numero_funcionario')
             senhap = form.cleaned_data.get('senhap')
-            user = authenticate(request, numero_funcionario=numero_funcionario, senhap=senhap)
+            user = authenticate(request, username=numero_funcionario, password=senhap)
             if user is not None:
-                user.backend = f'{ProfessorBackend.__module__}.{ProfessorBackend.__name__}'  # specify the backend
                 login(request, user)
                 return redirect('home')
             else:
@@ -233,7 +233,8 @@ def editar_estudante(request, id):
     if request.method == 'POST':
         form = EstudanteForm(request.POST, instance=estudante)
         if form.is_valid():
-            form.save()
+            estudante.senhap = make_password(request.POST.get('senhap'))  # criando um hash da senha
+            estudante.save()  # salva o objeto estudante, não o form
             return redirect('editar')
     else:
         form = EstudanteForm(instance=estudante)
@@ -251,7 +252,8 @@ def editar_professor(request, id):
     if request.method == 'POST':
         form = ProfessorForm(request.POST, instance=professor)
         if form.is_valid():
-            form.save()
+            professor.senhap = make_password(request.POST.get('senhap'))  # criando um hash da senha
+            professor.save()  # salva o objeto professor, não o form
             return redirect('editar')
     else:
         form = ProfessorForm(instance=professor)
@@ -345,7 +347,10 @@ def definir_notas(request, aula_id):
         prova = Prova.objects.get(id=prova_id)
         for estudante in estudantes:
             nota = request.POST.get(f'nota_{estudante.id}', 0)
-            Nota.objects.create(estudante=estudante, prova=prova, valor=nota)
+            nota = float(nota) if nota.strip() else 0
+            nota_obj, created = Nota.objects.get_or_create(estudante=estudante, prova=prova, defaults={'valor': nota})
+            nota_obj.valor = nota
+            nota_obj.save()
         return redirect('editar')
     else:
         estudantes = aula.alunos.all()
@@ -379,7 +384,7 @@ def calcular_media(request, aula_id):
     if request.method == 'POST':
         estudantes = aula.alunos.all()
         for estudante in estudantes:
-            media = estudante.media_notas()
+            media = estudante.media_notas(aula)
             estudante.media = media
             estudante.save()
         return redirect('editar')
@@ -392,7 +397,8 @@ def marcar_reprovados(request, aula_id):
     if request.method == 'POST':
         estudantes = aula.alunos.all()
         for estudante in estudantes:
-            if estudante.media < 6 or estudante.porcentagem_presenca(aula) < 0.75:
+            media = estudante.media_notas(aula)
+            if media < 6 or estudante.porcentagem_presenca(aula) < 0.75:
                 estudante.reprovado = True
                 estudante.save()
         return redirect('editar')
@@ -461,19 +467,47 @@ def definir_prova(request, aula_id):
     return render(request, 'definir_prova.html', {'form': form})
 
 def ver_notas(request, aula_id):
-    estudantes = Estudante.objects.all()
+    aula = Aula.objects.get(id=aula_id)
+    estudantes = aula.alunos.all()
     dados = []
 
     for estudante in estudantes:
-        notas = Nota.objects.filter(estudante=estudante)
-        media_ponderada = estudante.media_notas()
-        status = estudante.esta_aprovado()
+        provas_da_aula = Prova.objects.filter(aula=aula)
+        notas = Nota.objects.filter(estudante=estudante, prova__in=provas_da_aula)
+        media_ponderada = estudante.media_notas(aula)
+        status = 'Aprovado' if estudante.esta_aprovado(aula) else 'Reprovado'
         dados.append({
             'estudante': estudante,
             'notas': notas,
             'media_ponderada': media_ponderada,
-            'status': 'Aprovado' if status else 'Reprovado',
+            'status': status,
             'rowspan': notas.count() + 1,
         })
 
     return render(request, 'ver_notas.html', {'dados': dados})
+
+def professores(request):
+    professores = Professor.objects.all()
+    return render(request, 'professores.html', {'professores': professores})
+
+
+def ver_minhas_notas(request):
+    estudante = Estudante.objects.get(numero_estudante=request.user.numero_estudante)
+    aulas = Aula.objects.filter(alunos=estudante)
+    dados = []
+
+    for aula in aulas:
+        provas_da_aula = Prova.objects.filter(aula=aula)
+        notas = Nota.objects.filter(estudante=estudante, prova__in=provas_da_aula)
+        media_ponderada = estudante.media_notas(aula)
+        status = 'Aprovado' if estudante.esta_aprovado(aula) else 'Reprovado'
+        dados.append({
+            'aula': aula,
+            'estudante': estudante,
+            'notas': notas,
+            'media_ponderada': media_ponderada,
+            'status': status,
+            'rowspan': notas.count() + 1,
+        })
+
+    return render(request, 'ver_minhas_notas.html', {'dados': dados})

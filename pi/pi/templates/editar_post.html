@@ -5,11 +5,30 @@
 <div class="container mx-auto px-4">
     <h1 class="text-4xl font-bold mb-4">Editar Post</h1>
 
-    <form method="POST">
+    <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        {% for field in form %}
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+            {% if field.name == 'image_url' %}
+            <input id="{{ field.id_for_label }}" type="url" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}">
+            {% else %}
+            <input id="{{ field.id_for_label }}" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}">
+            {% endif %}
+            {% if field.help_text %}
+            <p class="text-gray-600 text-xs italic">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+            <p class="text-red-500 text-xs italic">{{ field.errors.as_text }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Salvar
+        </button>
     </form>
 </div>
     
-    {% endblock %}
+{% endblock %}
