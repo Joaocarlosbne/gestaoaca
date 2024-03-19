@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Registro de Estudante</h2>
-  <form method="post">
+  <h2 class="text-2xl font-bold mb-6">Registro de Estudante</h2>
+  <form method="post" class="flex flex-col w-full mt-10 space-y-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Registrar</button>
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded-md cursor-pointer hover:bg-blue-700 w-32 h-10">Registrar</button>
   </form>
 {% endblock %}

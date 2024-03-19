@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="post">
+<form method="post" class="flex flex-col w-64 mx-auto mt-10 space-y-4">
   {% csrf_token %}
-  <label for="numero_funcionario">numero funcionario:</label>
-  <input id="numero_funcionario" type="text" name="numero_funcionario" required>
+  <label for="numero_funcionario" class="font-bold">Número do funcionário:</label>
+  <input id="numero_funcionario" type="text" name="numero_funcionario" required class="border-2 border-gray-200 p-2 rounded-md">
 
-  <label for="senhap">Password:</label>
-  <input id="senhap" type="password" name="senhap" required>
+  <label for="senhap" class="font-bold">Senha:</label>
+  <input id="senhap" type="password" name="senhap" required class="border-2 border-gray-200 p-2 rounded-md">
 
   {% if form.non_field_errors %}
     <p class="error">{{ form.non_field_errors }}</p>
   {% endif %}
 
-  <input type="submit" value="Submit">
+  <input type="submit" value="Submit" class="bg-blue-500 text-white p-2 rounded-md cursor-pointer hover:bg-blue-700">
 </form>
 {% endblock %}
