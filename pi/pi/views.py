@@ -233,7 +233,7 @@ def editar_estudante(request, id):
     if request.method == 'POST':
         form = EstudanteForm(request.POST, instance=estudante)
         if form.is_valid():
-            estudante.senhap = make_password(request.POST.get('senhap'))  # criando um hash da senha
+            estudante.senha = make_password(request.POST.get('senha'))  # criando um hash da senha
             estudante.save()  # salva o objeto estudante, não o form
             return redirect('editar')
     else:

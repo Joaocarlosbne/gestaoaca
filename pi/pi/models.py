@@ -16,6 +16,9 @@ class Aula(models.Model):
     hora_fim = models.TimeField()
     numero_lista = models.IntegerField(default=1)
 
+    def __str__(self):
+        return self.disciplina.nome
+
 class Professor(AbstractUser):
     cordenador = models.CharField(max_length=100, null=True)
     nome = models.CharField(max_length=100, null=True)

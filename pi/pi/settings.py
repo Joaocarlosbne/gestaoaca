@@ -8,7 +8,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost:8000']
 
-CSRF_COOKIE_DOMAIN = 'glowing-goldfish-x5w945qxrxww3pj4g-8000.app.github.dev'
+CSRF_COOKIE_DOMAIN = 'fuzzy-telegram-694r4g6grrvc45j6-8000.app.github.dev'
 
 AUTH_USER_MODEL = 'pi.Professor'
 
